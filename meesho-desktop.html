@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Meesho Style Clone - Desktop</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+html, body {
+  min-height: 100%;
+  background: #ece9e2;
+}
+
+.site {
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.screen { display: none; flex-direction: column; }
+.screen.active { display: flex; }
+
+/* ---------- HEADER ---------- */
+.header {
+  background: linear-gradient(180deg, #b6111a 0%, #8f0d15 100%);
+  padding: 16px 6%;
+  color: #fff;
+}
+
+.top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #ffe0b2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 21px;
+  border: 2px solid #fff;
+}
+
+.profile-name {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 34px;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.nav-links a { color: #fff; text-decoration: none; opacity: 0.9; }
+.nav-links a:hover { opacity: 1; text-decoration: underline; }
+
+.icon-group {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  font-size: 22px;
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  background: #ffd400;
+  color: #8f0d15;
+  font-size: 10px;
+  font-weight: 800;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.sale-tag {
+  background: linear-gradient(135deg, #ffdca8, #ffb84d);
+  color: #7a0d12;
+  font-weight: 800;
+  padding: 10px 20px;
+  border-radius: 10px 10px 10px 0;
+  font-size: 26px;
+  line-height: 1.2;
+  position: relative;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+}
+
+.sale-tag .date-pill {
+  display: inline-block;
+  background: #7a0d12;
+  color: #ffd7a3;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.off-side {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bolt {
+  font-size: 42px;
+  filter: drop-shadow(0 0 6px rgba(255,255,0,0.6));
+}
+
+.off-side .upto {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.off-side .pct {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.search-bar {
+  background: #fff;
+  border-radius: 26px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  color: #9a9a9a;
+  max-width: 560px;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 15px;
+  color: #444;
+  background: transparent;
+}
+
+.search-bar .icon { font-size: 16px; color: #b6111a; }
+.search-bar .mic { color: #999; font-size: 16px; }
+
+/* ---------- MAIN CONTENT WRAP ---------- */
+.content-wrap {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 6%;
+}
+
+/* ---------- CATEGORY STRIP ---------- */
+.cat-strip {
+  display: flex;
+  gap: 30px;
+  overflow-x: auto;
+  padding: 26px 0 10px 0;
+  scrollbar-width: thin;
+}
+
+.cat-item { flex: 0 0 auto; width: 96px; text-align: center; }
+
+.cat-circle {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 2px solid #f7b23b;
+  background: linear-gradient(160deg, #fff4de, #ffe1ab);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s ease;
+}
+.cat-circle:hover { transform: translateY(-4px); }
+
+.cat-circle.live {
+  background: linear-gradient(135deg, #ff5f6d, #a3117a);
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 1.2;
+  border-color: #ffd400;
+}
+
+.cat-badge {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #c8102e;
+  color: #fff;
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 3px 0;
+}
+
+.cat-label {
+  font-size: 13px;
+  margin-top: 8px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- TIMER STRIP ---------- */
+.timer-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  background: linear-gradient(90deg, #ffe9b8, #ffd97a);
+  padding: 16px 6%;
+  position: relative;
+  margin-top: 10px;
+}
+
+.timer-strip .off-flag {
+  position: absolute;
+  left: 6%;
+  top: 0;
+  background: #c8102e;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 10px 10px 6px 10px;
+  line-height: 1.2;
+  clip-path: polygon(0 0, 100% 0, 78% 100%, 0% 100%);
+  width: 60px;
+}
+
+.timer-strip .label { font-weight: 700; color: #5a3b00; font-size: 20px; }
+
+.timer-strip .clock { display: flex; gap: 8px; }
+
+.timer-strip .clock span.box {
+  background: #c8102e; color: #fff; font-weight: 800;
+  font-size: 17px; padding: 6px 10px; border-radius: 6px;
+}
+
+.timer-strip .clock span.sep { color: #5a3b00; font-weight: 700; align-self: center; font-size: 17px; }
+
+.timer-strip .clock-icon { font-size: 26px; }
+
+/* ---------- OFFER ZONE ---------- */
+.section-title-band { text-align: center; padding: 26px 0 16px 0; }
+
+.section-title-band .pill {
+  display: inline-block;
+  background: linear-gradient(180deg, #ffe27a, #ffb800);
+  color: #7a0d12;
+  font-weight: 800;
+  font-size: 26px;
+  letter-spacing: 2px;
+  padding: 12px 44px;
+  border-radius: 26px;
+  box-shadow: 0 4px 0 #b8860b;
+}
+
+.offer-zone-bg {
+  background: linear-gradient(180deg, #6d1c63, #f6a94a 12%, #ffd98a 100%);
+  padding-bottom: 30px;
+}
+
+.tile-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+  padding: 6px 0 0 0;
+}
+
+.tile {
+  background: #fdf1e2;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #f0d6a0;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.tile:hover { transform: translateY(-5px); box-shadow: 0 8px 18px rgba(0,0,0,0.15); }
+
+.tile-badge {
+  position: absolute; top: 10px; left: 10px;
+  background: #c8102e; color: #fff; font-size: 10.5px; font-weight: 800;
+  text-align: center; line-height: 1.25; padding: 5px 8px; border-radius: 5px; z-index: 2;
+}
+
+.tile-img {
+  height: 150px; display: flex; align-items: center; justify-content: center; font-size: 56px;
+}
+
+.tile-name {
+  background: #7a0d3f; color: #fff; font-size: 13.5px; font-weight: 700;
+  text-align: center; padding: 10px 4px;
+}
+
+.p1 { background: linear-gradient(160deg,#ffd9c2,#ff9a76); }
+.p2 { background: linear-gradient(160deg,#dbe9ff,#9fb8ff); }
+.p3 { background: linear-gradient(160deg,#d3f5df,#7fd9a0); }
+.p4 { background: linear-gradient(160deg,#ffe3f0,#ffaed4); }
+.p5 { background: linear-gradient(160deg,#fff0c2,#ffd166); }
+.p6 { background: linear-gradient(160deg,#e4d9ff,#b79bff); }
+.p7 { background: linear-gradient(160deg,#c9f0ff,#7fd6ff); }
+.p8 { background: linear-gradient(160deg,#ffd6d6,#ff8f8f); }
+.p9 { background: linear-gradient(160deg,#e0ffe0,#9be89b); }
+
+.go-btn-wrap { text-align: center; padding-top: 26px; }
+
+.go-btn {
+  display: inline-block; background: #7a0d3f; color: #fff; font-weight: 700;
+  font-size: 15px; padding: 13px 34px; border-radius: 26px; border: none; cursor: pointer;
+  transition: background 0.15s ease;
+}
+.go-btn:hover { background: #5c0930; }
+
+/* ---------- FLASH SALE / SECTIONS ---------- */
+.section-block { padding: 34px 0 10px 0; }
+
+.section-head {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
+}
+.section-head h2 { font-size: 30px; color: #2b2b2b; }
+.section-head .view-all {
+  color: #b6117a; font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 5px; cursor: pointer;
+}
+
+.flash-timer {
+  display: inline-flex; align-items: center; gap: 8px; background: #fff1e8; color: #d1481f;
+  font-weight: 700; font-size: 16px; padding: 6px 14px; border-radius: 18px; margin-bottom: 18px;
+}
+
+.flash-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; }
+
+.flash-card {
+  border-radius: 14px; overflow: hidden; border: 1px solid #eee;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: transform 0.15s ease;
+}
+.flash-card:hover { transform: translateY(-5px); }
+
+.flash-img { height: 150px; position: relative; display: flex; align-items: center; justify-content: center; font-size: 50px; }
+
+.flash-flag {
+  position: absolute; top: 10px; right: 10px; background: #fff; color: #b6117a; font-size: 10px;
+  font-weight: 800; padding: 3px 7px; border-radius: 5px; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.flash-off {
+  position: absolute; bottom: 10px; left: 10px; background: #c8102e; color: #fff; font-size: 11px;
+  font-weight: 800; padding: 4px 9px; border-radius: 12px;
+}
+
+.flash-label { font-size: 14px; text-align: center; padding: 10px 6px; color: #333; font-weight: 600; }
+
+/* ---------- MAHA SAVER ---------- */
+.saver-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; }
+
+.saver-card {
+  height: 170px; border-radius: 18px 18px 38px 38px; border: 2px solid #eaccae;
+  background: linear-gradient(180deg, #fff3e6, #ffe3c7); position: relative;
+  display: flex; align-items: center; justify-content: center; font-size: 48px;
+  transition: transform 0.15s ease;
+}
+.saver-card:hover { transform: translateY(-5px); }
+
+.saver-price {
+  position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+  background: #b6111a; color: #fff; font-size: 13px; font-weight: 800; padding: 6px 14px;
+  border-radius: 14px; text-align: center; line-height: 1.2; white-space: nowrap;
+}
+.saver-price small { display: block; font-size: 9.5px; font-weight: 600; }
+
+/* ---------- VIDEO STRIP ---------- */
+.video-strip {
+  display: flex; align-items: center; justify-content: space-between; background: #fff2ea;
+  margin: 30px 0 0 0; padding: 20px 30px; border-radius: 16px;
+}
+.video-strip .left { display: flex; align-items: center; gap: 12px; font-weight: 700; color: #333; font-size: 19px; }
+.video-strip .right { color: #b6117a; font-weight: 800; font-size: 15px; display: flex; align-items: center; gap: 5px; }
+
+/* ---------- FOOTER ---------- */
+.site-footer {
+  margin-top: 50px;
+  background: #2b0f18;
+  color: #eee;
+  padding: 40px 6%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  font-size: 13.5px;
+}
+.site-footer h4 { color: #ffb84d; margin-bottom: 12px; font-size: 15px; }
+.site-footer p, .site-footer a { color: #cfc2c6; text-decoration: none; line-height: 1.9; display: block; }
+.footer-bottom {
+  text-align: center; padding: 16px; background: #200a10; color: #998; font-size: 12px;
+}
+
+@media (max-width: 1100px){
+  .tile-grid, .flash-row, .saver-row { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 800px){
+  .tile-grid, .flash-row, .saver-row { grid-template-columns: repeat(3, 1fr); }
+  .site-footer { grid-template-columns: repeat(2, 1fr); }
+  .hero-row { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 520px){
+  .tile-grid, .flash-row, .saver-row { grid-template-columns: repeat(2, 1fr); }
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="site">
+
+  <!-- ================= SCREEN 1 : HOME ================= -->
+  <div class="screen active" id="screen1">
+
+    <div class="header">
+      <div class="top-row">
+        <div class="profile">
+          <div class="avatar">🧑</div>
+          <div class="profile-name">Jyotiraditya Shukla</div>
+        </div>
+        <div class="nav-links">
+          <a href="#">Home</a>
+          <a href="#" onclick="showScreen(2); return false;">Categories</a>
+          <a href="#" onclick="showScreen(2); return false;">Mall</a>
+          <a href="#" onclick="showScreen(2); return false;">My Orders</a>
+        </div>
+        <div class="icon-group">
+          <div>♡</div>
+          <div style="position:relative;">
+            🛒
+            <div class="cart-badge">4</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-row">
+        <div class="sale-tag">
+          MAHA INDIAN SAVINGS SALE
+          <div class="date-pill">4-5 JULY</div>
+        </div>
+        <div class="off-side">
+          <div class="bolt">⚡</div>
+          <div>
+            <div class="upto">UPTO</div>
+            <div class="pct">70% OFF</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="search-bar">
+        <span class="icon">🔍</span>
+        <input type="text" placeholder="Search by Keyword or Product ID">
+        <span class="mic">🎤</span>
+        <span class="mic">📷</span>
+      </div>
+    </div>
+
+    <div class="content-wrap">
+      <div class="cat-strip">
+        <div class="cat-item">
+          <div class="cat-circle live">SALE<br>IS LIVE</div>
+          <div class="cat-label">All Categories</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-circle">👗<div class="cat-badge">FROM ₹99</div></div>
+          <div class="cat-label">Kurtis & Suits</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-circle">🧒<div class="cat-badge">UPTO 70% OFF</div></div>
+          <div class="cat-label">Kids</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-circle">💄<div class="cat-badge">UPTO 70% OFF</div></div>
+          <div class="cat-label">Beauty</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-circle">🍳<div class="cat-badge">UPTO 70% OFF</div></div>
+          <div class="cat-label">Kitchen</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-circle">🎒<div class="cat-badge">UPTO 70%</div></div>
+          <div class="cat-label">Bags</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-circle">🧥<div class="cat-badge">UPTO 70% OFF</div></div>
+          <div class="cat-label">Western Wear</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-circle">🥻<div class="cat-badge">UPTO 70% OFF</div></div>
+          <div class="cat-label">Sarees</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-circle">🏺<div class="cat-badge">UPTO 70% OFF</div></div>
+          <div class="cat-label">Home Decor</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-circle">🕶️<div class="cat-badge">FROM ₹99</div></div>
+          <div class="cat-label">Men Fashion</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-circle">👙<div class="cat-badge">UPTO 70% OFF</div></div>
+          <div class="cat-label">Innerwear</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-circle">⌚<div class="cat-badge">UPTO 70%</div></div>
+          <div class="cat-label">Watches</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timer-strip">
+      <div class="off-flag">UPTO<br>70%<br>OFF</div>
+      <div class="label">Sale Ends in</div>
+      <div class="clock">
+        <span class="box" id="hh1">23</span>
+        <span class="sep">h:</span>
+        <span class="box" id="mm1">17</span>
+        <span class="sep">m:</span>
+        <span class="box" id="ss1">57</span>
+        <span class="sep">s</span>
+      </div>
+      <div class="clock-icon">🕐</div>
+    </div>
+
+    <div class="offer-zone-bg">
+      <div class="section-title-band">
+        <span class="pill">OFFER ZONE</span>
+      </div>
+
+      <div class="content-wrap">
+        <div class="tile-grid">
+          <div class="tile">
+            <div class="tile-badge">SALE<br>FROM<br>₹99</div>
+            <div class="tile-img p1">👘</div>
+            <div class="tile-name">Kurtis & Suits</div>
+          </div>
+          <div class="tile">
+            <div class="tile-badge">SALE<br>UPTO<br>70% OFF</div>
+            <div class="tile-img p2">🍳</div>
+            <div class="tile-name">Home & Kitchen</div>
+          </div>
+          <div class="tile">
+            <div class="tile-badge">SALE<br>UPTO<br>70% OFF</div>
+            <div class="tile-img p3">🪟</div>
+            <div class="tile-name">Decor & Furnishing</div>
+          </div>
+          <div class="tile">
+            <div class="tile-badge">SALE<br>FROM<br>₹49</div>
+            <div class="tile-img p5">💄</div>
+            <div class="tile-name">Beauty & Care</div>
+          </div>
+          <div class="tile">
+            <div class="tile-badge">SALE<br>UPTO<br>70% OFF</div>
+            <div class="tile-img p4">🧸</div>
+            <div class="tile-name">Kids Store</div>
+          </div>
+          <div class="tile">
+            <div class="tile-badge">SALE<br>FROM<br>₹99</div>
+            <div class="tile-img p6">👗</div>
+            <div class="tile-name">Western Wear</div>
+          </div>
+        </div>
+
+        <div class="go-btn-wrap">
+          <button class="go-btn" onclick="showScreen(2)">See More &rarr; Page 2</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <div>
+        <h4>Meesho Style Clone</h4>
+        <p>A learning project HTML/CSS clone, not affiliated with Meesho.</p>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Careers</a>
+        <a href="#">Blog</a>
+      </div>
+      <div>
+        <h4>Help</h4>
+        <a href="#">Payments</a>
+        <a href="#">Shipping</a>
+        <a href="#">Returns</a>
+      </div>
+      <div>
+        <h4>Follow</h4>
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+        <a href="#">Twitter</a>
+      </div>
+    </footer>
+    <div class="footer-bottom">Made for practice by Jyotiraditya Shukla · Not affiliated with Meesho</div>
+
+  </div>
+
+  <!-- ================= SCREEN 2 : OFFERS ================= -->
+  <div class="screen" id="screen2">
+
+    <div class="header">
+      <div class="top-row">
+        <div class="profile">
+          <div class="avatar">🧑</div>
+          <div class="profile-name">Jyotiraditya Shukla</div>
+        </div>
+        <div class="nav-links">
+          <a href="#" onclick="showScreen(1); return false;">Home</a>
+          <a href="#">Categories</a>
+          <a href="#">Mall</a>
+          <a href="#">My Orders</a>
+        </div>
+        <div class="icon-group">
+          <div>♡</div>
+          <div style="position:relative;">
+            🛒
+            <div class="cart-badge">4</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-row">
+        <div class="sale-tag">
+          MAHA INDIAN SAVINGS SALE
+          <div class="date-pill">4-5 JULY</div>
+        </div>
+        <div class="off-side">
+          <div class="bolt">⚡</div>
+          <div>
+            <div class="upto">UPTO</div>
+            <div class="pct">70% OFF</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="search-bar">
+        <span class="icon">🔍</span>
+        <input type="text" placeholder="Search by Keyword or Product ID">
+        <span class="mic">🎤</span>
+        <span class="mic">📷</span>
+      </div>
+    </div>
+
+    <div class="timer-strip">
+      <div class="off-flag">UPTO<br>70%<br>OFF</div>
+      <div class="label">Sale Ends in</div>
+      <div class="clock">
+        <span class="box" id="hh2">23</span>
+        <span class="sep">h:</span>
+        <span class="box" id="mm2">17</span>
+        <span class="sep">m:</span>
+        <span class="box" id="ss2">32</span>
+        <span class="sep">s</span>
+      </div>
+      <div class="clock-icon">🕐</div>
+    </div>
+
+    <div class="offer-zone-bg">
+      <div class="section-title-band">
+        <span class="pill">OFFER ZONE</span>
+      </div>
+
+      <div class="content-wrap">
+        <div class="tile-grid">
+          <div class="tile">
+            <div class="tile-badge">SALE<br>FROM<br>₹99</div>
+            <div class="tile-img p1">👘</div>
+            <div class="tile-name">Kurtis & Suits</div>
+          </div>
+          <div class="tile">
+            <div class="tile-badge">SALE<br>UPTO<br>70% OFF</div>
+            <div class="tile-img p2">🍳</div>
+            <div class="tile-name">Home & Kitchen</div>
+          </div>
+          <div class="tile">
+            <div class="tile-badge">SALE<br>UPTO<br>70% OFF</div>
+            <div class="tile-img p3">🪟</div>
+            <div class="tile-name">Decor & Furnishing</div>
+          </div>
+          <div class="tile">
+            <div class="tile-badge">SALE<br>FROM<br>₹49</div>
+            <div class="tile-img p5">💄</div>
+            <div class="tile-name">Beauty & Care</div>
+          </div>
+          <div class="tile">
+            <div class="tile-badge">SALE<br>UPTO<br>70% OFF</div>
+            <div class="tile-img p4">🧸</div>
+            <div class="tile-name">Kids Store</div>
+          </div>
+          <div class="tile">
+            <div class="tile-badge">SALE<br>FROM<br>₹99</div>
+            <div class="tile-img p6">👗</div>
+            <div class="tile-name">Western Wear</div>
+          </div>
+          <div class="tile">
+            <div class="tile-badge">SALE<br>FROM<br>₹149</div>
+            <div class="tile-img p7">🥻</div>
+            <div class="tile-name">Ethnic Wear</div>
+          </div>
+          <div class="tile">
+            <div class="tile-badge">SALE<br>FROM<br>₹99</div>
+            <div class="tile-img p8">👔</div>
+            <div class="tile-name">Men Fashion</div>
+          </div>
+          <div class="tile">
+            <div class="tile-badge">SALE<br>UPTO<br>70% OFF</div>
+            <div class="tile-img p9">👜</div>
+            <div class="tile-name">Bags & Watches</div>
+          </div>
+          <div class="tile">
+            <div class="tile-img p8">🧴</div>
+            <div class="tile-name">Top Brands</div>
+          </div>
+          <div class="tile">
+            <div class="tile-img p4">🩱</div>
+            <div class="tile-name">Innerwear</div>
+          </div>
+          <div class="tile">
+            <div class="tile-img p6">💍</div>
+            <div class="tile-name">Jewellery</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-wrap">
+      <div class="section-block">
+        <div class="section-head">
+          <h2>Flash Sale</h2>
+          <div class="view-all">VIEW ALL &rarr;</div>
+        </div>
+        <div class="flash-timer">💣 00h : 17m : 39s</div>
+        <div class="flash-row">
+          <div class="flash-card">
+            <div class="flash-img p1">
+              👘
+              <div class="flash-flag">Flash⚡Sale</div>
+              <div class="flash-off">UPTO 70% OFF</div>
+            </div>
+            <div class="flash-label">Kurtis & Suits</div>
+          </div>
+          <div class="flash-card">
+            <div class="flash-img p2">
+              🍳
+              <div class="flash-flag">Flash⚡Sale</div>
+              <div class="flash-off">UPTO 70% OFF</div>
+            </div>
+            <div class="flash-label">Home & Kitchen</div>
+          </div>
+          <div class="flash-card">
+            <div class="flash-img p4">
+              🧒
+              <div class="flash-flag">Flash⚡Sale</div>
+              <div class="flash-off">UPTO 70% OFF</div>
+            </div>
+            <div class="flash-label">Kids Store</div>
+          </div>
+          <div class="flash-card">
+            <div class="flash-img p6">
+              👗
+              <div class="flash-flag">Flash⚡Sale</div>
+              <div class="flash-off">UPTO 70% OFF</div>
+            </div>
+            <div class="flash-label">Western Wear</div>
+          </div>
+          <div class="flash-card">
+            <div class="flash-img p7">
+              🥻
+              <div class="flash-flag">Flash⚡Sale</div>
+              <div class="flash-off">UPTO 70% OFF</div>
+            </div>
+            <div class="flash-label">Ethnic Wear</div>
+          </div>
+          <div class="flash-card">
+            <div class="flash-img p9">
+              👜
+              <div class="flash-flag">Flash⚡Sale</div>
+              <div class="flash-off">UPTO 70% OFF</div>
+            </div>
+            <div class="flash-label">Bags</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-head">
+          <h2>Meesho Maha Saver</h2>
+        </div>
+        <div class="saver-row">
+          <div class="saver-card">
+            👜
+            <div class="saver-price">UNDER<br><small>₹99</small></div>
+          </div>
+          <div class="saver-card">
+            🎧
+            <div class="saver-price">UNDER<br><small>₹149</small></div>
+          </div>
+          <div class="saver-card">
+            🎒
+            <div class="saver-price">UNDER<br><small>₹199</small></div>
+          </div>
+          <div class="saver-card">
+            👓
+            <div class="saver-price">UNDER<br><small>₹129</small></div>
+          </div>
+          <div class="saver-card">
+            🧦
+            <div class="saver-price">UNDER<br><small>₹79</small></div>
+          </div>
+          <div class="saver-card">
+            🧢
+            <div class="saver-price">UNDER<br><small>₹99</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="video-strip">
+        <div class="left">🎥 Video Unique Finds</div>
+        <div class="right">UPTO 70% OFF &rarr;</div>
+      </div>
+
+      <div class="go-btn-wrap" style="padding:30px 0;">
+        <button class="go-btn" onclick="showScreen(1)">&larr; Back to Home</button>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <div>
+        <h4>Meesho Style Clone</h4>
+        <p>A learning project HTML/CSS clone, not affiliated with Meesho.</p>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Careers</a>
+        <a href="#">Blog</a>
+      </div>
+      <div>
+        <h4>Help</h4>
+        <a href="#">Payments</a>
+        <a href="#">Shipping</a>
+        <a href="#">Returns</a>
+      </div>
+      <div>
+        <h4>Follow</h4>
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+        <a href="#">Twitter</a>
+      </div>
+    </footer>
+    <div class="footer-bottom">Made for practice by Jyotiraditya Shukla · Not affiliated with Meesho</div>
+
+  </div>
+
+</div>
+
+<script>
+function showScreen(n){
+  document.getElementById('screen1').classList.toggle('active', n===1);
+  document.getElementById('screen2').classList.toggle('active', n===2);
+  window.scrollTo(0,0);
+}
+
+function startTimer(hEl,mEl,sEl,h,m,s){
+  setInterval(() => {
+    if (s > 0) { s--; }
+    else { s = 59; if (m > 0) { m--; } else { m = 59; if (h > 0) h--; } }
+    document.getElementById(hEl).textContent = String(h).padStart(2,'0');
+    document.getElementById(mEl).textContent = String(m).padStart(2,'0');
+    document.getElementById(sEl).textContent = String(s).padStart(2,'0');
+  }, 1000);
+}
+startTimer('hh1','mm1','ss1',23,17,57);
+startTimer('hh2','mm2','ss2',23,17,32);
+</script>
+</body>
+</html>
